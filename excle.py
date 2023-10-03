@@ -1,8 +1,9 @@
 import openpyxl
 
-book = openpyxl.load_workbook('/Users/yamaokana/Desktop/project_2/excel_data/Book1.xlsx')
-print(len(book.sheetnames))
+book = openpyxl.load_workbook('excel_data/Book1.xlsx')
+ws = book["Sheet1"]
+cell = ws.cell(row=1,column=1)
+cell.value = "データA1"
+book.save('excel_data/Book1.xlsx')
 
-for name in book.get_sheet_names():
-    print(name)
-
+book.close()

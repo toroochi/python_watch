@@ -5,7 +5,7 @@ sg.theme('DarkPurple1')
 def getTime():
      return datetime.datetime.now().strftime('%-m/%-d %H:%M:%S')
 
-layout = [[sg.Text('', size=(20, 2), key='_time_',font=(40))],[sg.Text('Command'),sg.InputText(size=(20,1))]]
+layout = [[sg.Text('', size=(20, 2), key='_time_',font=(40))],[sg.Text('Command'),sg.InputText(size=(20,3),key='-command-'),sg.Button('OK', key='-btn-')]]
 window = sg.Window('Clock', layout, grab_anywhere=True)
 
 while True:

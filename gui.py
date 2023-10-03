@@ -1,17 +1,16 @@
 import PySimpleGUI as sg
-import tkinter as tk
 import datetime
 
-dt_now = datetime.datetime.now()
-today = dt_now.strftime('%Y年%m月%d日')
-today_time = dt_now.hour,"時",dt_now.minute,"分"
-layout = [[sg.Text(today)], [sg.Text(today_time)],[sg.Button("OK")]]
-window = sg.Window("watch", layout, size=(200, 100))
+def getTime():
+     return datetime.datetime.now().strftime('%-m/%-d %H:%M:%S')
 
+layout = [[sg.Text('', size=(19, 0), key='_time_',font=(30))]]
+window = sg.Window('Clock', layout, grab_anywhere=True)
 
 while True:
-    event, values = window.read()
-    if event == sg.WIN_CLOSED:
-        break  
+     event, values = window.Read(timeout=1000)
+     if event == sg.WINDOW_CLOSED:
+         break
+     window.FindElement('_time_').Update(getTime())
 
-window.close()
+window.Close()

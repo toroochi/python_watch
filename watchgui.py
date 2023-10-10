@@ -30,19 +30,20 @@ def Record():
      global i,j,p,q
      if wsbool == True:
           ws.cell(row=i,column=1).value = wstart
-          book.save('excel_data/Book1.xlsx')
           i += 1
           wsbool == False
+          book.save('excel_data/Book1.xlsx')
+          print(wsbool)
      if webool == True:
           ws.cell(row=j,column=2).value = wend
           j += 1
-          book.save('excel_data/Book1.xlsx')
           wend == False
+          book.save('excel_data/Book1.xlsx')
      if bsbool == True:
           ws.cell(row=p,column=3).value = bstart
           p += 1
-          book.save('excel_data/Book1.xlsx')
           bsbool == False
+          book.save('excel_data/Book1.xlsx')
      if bebool == True:
           ws.cell(row=q,column=4).value = bend
           q += 1
@@ -57,7 +58,6 @@ while True:
                wstart = datetime.datetime.now()
                window['-command-'].update('')
                wsbool = True
-               print(wsbool)
           elif values['-command-'] == 'wend':
                wend = datetime.datetime.now()
                window['-command-'].update('')

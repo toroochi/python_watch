@@ -5,6 +5,9 @@ import openpyxl
 book = openpyxl.load_workbook('excel_data/Book1.xlsx')
 ws = book["Sheet1"]
 i = 1
+j = 1
+p = 1
+q = 1
 
 sg.theme('DarkPurple1')
 wstart = 0 #workstart
@@ -24,14 +27,28 @@ layout = [[sg.Text('', size=(20, 2), key='_time_',font=(40))],[sg.Text('Command'
 window = sg.Window('Clock', layout, grab_anywhere=True)
 
 def Record():
-    if wsbool == True:
-        cell = cell(row=i,column=1)
-        cell.value = wstart
-        i += 1
-        wsbool == False
-        book.save('excel_data/Book1.xlsx')
-    book.close()
-
+     global i,j,p,q
+     if wsbool == True:
+          ws.cell(row=i,column=1).value = wstart
+          book.save('excel_data/Book1.xlsx')
+          i += 1
+          wsbool == False
+     if webool == True:
+          ws.cell(row=j,column=2).value = wend
+          j += 1
+          book.save('excel_data/Book1.xlsx')
+          wend == False
+     if bsbool == True:
+          ws.cell(row=p,column=3).value = bstart
+          p += 1
+          book.save('excel_data/Book1.xlsx')
+          bsbool == False
+     if bebool == True:
+          ws.cell(row=q,column=4).value = bend
+          q += 1
+          bend == False
+          book.save('excel_data/Book1.xlsx')
+     
 while True:
      Record()
      event, values = window.Read(timeout=1000)
@@ -56,8 +73,6 @@ while True:
      if event == sg.WINDOW_CLOSED:
          break
      window.FindElement('_time_').Update(getTime())
-
-
 
 
 window.Close()

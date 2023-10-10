@@ -1,6 +1,10 @@
 import PySimpleGUI as sg
 import datetime
-import data
+import openpyxl
+
+book = openpyxl.load_workbook('excel_data/Book1.xlsx')
+ws = book["Sheet1"]
+i = 1
 
 sg.theme('DarkPurple1')
 wstart = 0 #workstart
@@ -19,8 +23,17 @@ def getTime():
 layout = [[sg.Text('', size=(20, 2), key='_time_',font=(40))],[sg.Text('Command'),sg.InputText(size=(20,3),key='-command-'),sg.Button('OK', key='-btn-')]]
 window = sg.Window('Clock', layout, grab_anywhere=True)
 
+def Record():
+    if wsbool == True:
+        cell = cell(row=i,column=1)
+        cell.value = wstart
+        i += 1
+        wsbool == False
+        book.save('excel_data/Book1.xlsx')
+    book.close()
+
 while True:
-     data.Record()
+     Record()
      event, values = window.Read(timeout=1000)
      if event == '-btn-':
           if values['-command-'] == 'wstart':
@@ -43,5 +56,8 @@ while True:
      if event == sg.WINDOW_CLOSED:
          break
      window.FindElement('_time_').Update(getTime())
+
+
+
 
 window.Close()

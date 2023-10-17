@@ -3,7 +3,7 @@ import datetime
 import openpyxl
 
 book = openpyxl.load_workbook('excel_data/Book1.xlsx')
-ws = book["Sheet1"]
+ws = book["memory"]
 i = 1
 j = 1
 p = 1
@@ -13,6 +13,11 @@ a = False
 b = False
 c = False 
 d = False
+
+wtime = 0
+btime = 0
+normTime = 0
+finish = False
 
 while True:
      if ws.cell(row=i,column=1).value != None:
@@ -53,9 +58,11 @@ layout = [[sg.Text('', size=(20, 2), key='_time_',font=(40))],[sg.Text('Command'
 window = sg.Window('Clock', layout, grab_anywhere=True)
 
 def Record():
-     global i,j,p,q,count,wsbool,webool,bsbool,bebool
+     global i,j,p,q,count,wsbool,webool,bsbool,bebool,finish
      if wsbool == True and count == 1:
+          print(type(wstart))
           ws.cell(row=i,column=1).value = wstart
+          print(wstart)
           i += 1
           wsbool = False
           book.save('excel_data/Book1.xlsx')
@@ -80,32 +87,59 @@ def Record():
           bebool = False
           book.save('excel_data/Book1.xlsx')
           count = 0
+     if finish == True:
+          #バカ式！！！！！直せ！！！
+          btime = abs((ws.cell(row=q - 1,column=4).value - ws.cell(row=p -1 ,column=3).value) - (ws.cell(row=1,column=4).value - ws.cell(row=1,column=3).value))
+          maxVal = []
+          #ここのrangeがおかしい？？？
+          for i in range(1,ws.max_column + 1):
+               for j in range(1,ws.max_row + 1):
+                    maxVal.append(ws.cell(i,j).value)
+          wtime = (max(maxVal) - min(maxVal)) - btime
+          normTime = abs(wtime/btime - 52/17)/max(wtime/btime,52/17)
+
+          print(wtime,btime,normTime)
+
+          ws.cell(row=1,column=5).value = wtime
+          ws.cell(row=2,column=5).value = btime
+          ws.cell(row=3,column=5).value = normTime
+          book.save('excel_data/Book1.xlsx')
+
+          finish = False
      
 while True:
      Record()
      event, values = window.Read(timeout=1000)
      if event == '-btn-':
           if values['-command-'] == 'wstart' and count == 0:
-               wstart = datetime.datetime.now()
+               wstart1 = datetime.datetime.now().time()
+               wstart = (wstart1.hour * 100) + (wstart1.minute)
                window['-command-'].update('')
                wsbool = True
                count += 1
                print(count)
           elif values['-command-'] == 'wend' and count == 0:
-               wend = datetime.datetime.now()
+               wend1 = datetime.datetime.now().time()
+               wend = (wend1.hour * 100) + (wend1.minute)
                window['-command-'].update('')
                webool = True
                count += 1
           elif values['-command-'] == 'bstart' and count == 0:
-               bstart = datetime.datetime.now()
+               bstart1 = datetime.datetime.now().time()
+               bstart = (bstart1.hour * 100) + (bstart1.minute)
                window['-command-'].update('')
                bsbool = True
                count += 1
           elif values['-command-'] == 'bend' and count == 0:
-               bend = datetime.datetime.now()    
+               bend1 = datetime.datetime.now().time()  
+               bend = (bend1.hour * 100) + (bend1.minute)
                window['-command-'].update('')
                bebool = True
                count += 1
+          elif values['-command-'] == 'finish':
+               finish = True
+               window['-command-'].update('')
+
      if event == sg.WINDOW_CLOSED:
          break
      window.find_element('_time_').Update(getTime())

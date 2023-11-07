@@ -88,15 +88,15 @@ def Record():
           book.save('excel_data/Book1.xlsx')
           count = 0
      if finish == True:
-          #バカ式！！！！！直せ！！！
+          maxVal = [] 
+          maxVal = [val for val in maxVal if val is not None]  # Noneを除外
           btime = abs((ws.cell(row=q - 1,column=4).value - ws.cell(row=p -1 ,column=3).value) - (ws.cell(row=1,column=4).value - ws.cell(row=1,column=3).value))
-          maxVal = []
-          #ここのrangeがおかしい？？？
-          for i in range(1,ws.max_column + 1):
-               for j in range(1,ws.max_row + 1):
-                    maxVal.append(ws.cell(i,j).value)
-          wtime = (max(maxVal) - min(maxVal)) - btime
-          normTime = abs(wtime/btime - 52/17)/max(wtime/btime,52/17)
+          if maxVal:  # maxValが空でないことを確認
+               wtime = (max(maxVal) - min(maxVal)) - btime
+               normTime = abs(wtime/btime - 52/17)/max(wtime/btime,52/17)
+          else:
+               wtime = 0
+               normTime = 0
 
           print(wtime,btime,normTime)
 
